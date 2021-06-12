@@ -20,7 +20,7 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
+PORT = int(os.environ.get('PORT', 5000))
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -77,7 +77,10 @@ def main():
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, reply_to_text_message))
     dispatcher.add_handler(MessageHandler(Filters.photo, read_image))
     # Start the Bot
-    updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=ocr_bot_token)
+    updater.bot.setWebhook('https://yourherokuappname.herokuapp.com/' + TOKEN)
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
